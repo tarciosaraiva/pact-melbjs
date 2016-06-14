@@ -1,16 +1,16 @@
 var path = require('path')
 var Pact = require('pact')
-var Interceptor = require('pact').Interceptor
-var Matcher = require('pact').Matcher
 var expect = require('chai').expect
-var wrapper = require('@pact-foundation/pact-node')
+// var Matcher = require('pact').Matcher
 var request = require('request-promise')
+var Interceptor = require('pact').Interceptor
+var wrapper = require('@pact-foundation/pact-node')
 
+// this is our consumer
 var consumer = require('../src/index')
 
 describe('Pact', function () {
-  // when using the wrapper, you will need to tell it where to store the logs
-  // make sure you the folders created before hand
+  // when using the wrapper, tell it where to store the logs and pacts
   const mockServer = wrapper.createServer({
     port: 1234,
     log: path.resolve(process.cwd(), 'logs', 'mockserver-integration.log'),
@@ -18,6 +18,7 @@ describe('Pact', function () {
     spec: 2
   })
 
+  // the interceptor will forward requests to the mock server
   var interceptor = new Interceptor('http://localhost:1234')
 
   // this is the response you expect from your Provider
@@ -30,6 +31,7 @@ describe('Pact', function () {
 
   var pact
 
+  // start your consumer
   before(function (done) {
     consumer.listen(9981, done)
   })
@@ -40,18 +42,19 @@ describe('Pact', function () {
     wrapper.removeAllServers()
   })
 
-  // start a new mock server, also setting up Pact
+  // start a new mock server
   beforeEach(function (done) {
     mockServer.start().then(function () {
-      // in order to use the Verifier, simply pass an object like below
-      // it should contain the names of the consumer and provider in normal language
+      // and setup Pact, passing the names of the consumer and provider
       pact = Pact({ consumer: 'Projects', provider: 'Tasks' })
+      // tell interceptor to intercept all requests aimed at the URL
       interceptor.interceptRequestsOn('http://localhost:9980')
       done()
     })
   })
 
   // ensure the mock server is stopped and deleted
+  // once all tests are completed
   afterEach(function (done) {
     mockServer.delete().then(function () {
       interceptor.stopIntercepting()
@@ -61,7 +64,6 @@ describe('Pact', function () {
 
   context('with a single request', function () {
     it('successfully writes Pact file', function (done) {
-
       // your function that returns a promise
       function requestProjectTasks () {
         return request('http://localhost:9981/projects/1/tasks')
@@ -73,14 +75,18 @@ describe('Pact', function () {
         .given('i have project that needs tasks')
         .uponReceiving('a request for projects')
         .withRequest('get', '/tasks', null, { 'Accept': 'application/json' })
-        .willRespondWith(200, { 'Content-Type': Matcher.somethingLike('application/json') }, EXPECTED_BODY)
+        .willRespondWith(200, { 'Content-Type': 'application/json' }, EXPECTED_BODY)
+        // .willRespondWith(200, { 'Content-Type': Matcher.somethingLike('application/json') }, EXPECTED_BODY)
 
       // and this is how the verification process invokes your request
-      // and writes the Pact file if all is well, returning you the data of the request
-      // so you can do your assertions
+      // and writes the Pact file if all is well
+      // it returns the data of the request so you can do your assertions
       pact.verify(requestProjectTasks)
         .then((data) => {
-          expect(JSON.parse(data).tasks).to.eql(EXPECTED_BODY)
+          expect(data).to.not.be.null
+          var jsonData = JSON.parse(data)
+          expect(jsonData).to.have.property('tasks')
+          expect(jsonData.tasks).to.eql(EXPECTED_BODY)
           done()
         })
         .catch((err) => {
