@@ -1,0 +1,19 @@
+{
+  "name": "pact-melbjs",
+  "version": "0.0.1",
+  "description": "Sample project for MelbJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --require ./node_modules/pact-js-mocha/src/index.js"
+  },
+  "author": "Tarcio Saraiva <tarcio@gmail.com> (http://twitter.com/tarciosaraiva)",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "2.5.3",
+    "pact-js-mocha": "pact-foundation/pact-js-mocha"
+  },
+  "dependencies": {
+    "body-parser": "1.15.1",
+    "express": "4.13.4"
+  }
+}
