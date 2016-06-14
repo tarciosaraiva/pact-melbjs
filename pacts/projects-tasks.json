@@ -1,0 +1,57 @@
+{
+  "consumer": {
+    "name": "Projects"
+  },
+  "provider": {
+    "name": "Tasks"
+  },
+  "interactions": [
+    {
+      "description": "a request for projects",
+      "provider_state": "i have project that needs tasks",
+      "request": {
+        "method": "GET",
+        "path": "/tasks",
+        "headers": {
+          "Accept": "application/json"
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": [
+          {
+            "id": 1,
+            "name": "Do the laundry",
+            "done": true
+          },
+          {
+            "id": 2,
+            "name": "Do the dishes",
+            "done": false
+          },
+          {
+            "id": 3,
+            "name": "Do the backyard",
+            "done": false
+          },
+          {
+            "id": 4,
+            "name": "Do nothing",
+            "done": false
+          }
+        ],
+        "matchingRules": {
+          "$.headers.Content-Type": {
+            "match": "type"
+          }
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecificationVersion": "2.0.0"
+  }
+}

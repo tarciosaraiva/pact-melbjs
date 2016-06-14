@@ -8,12 +8,20 @@
   },
   "author": "Tarcio Saraiva <tarcio@gmail.com> (http://twitter.com/tarciosaraiva)",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tarciosaraiva/pact-melbjs.git"
+  },
   "devDependencies": {
+    "@pact-foundation/pact-node": "4.3.2",
+    "chai": "3.5.0",
     "mocha": "2.5.3",
+    "pact": "pact-foundation/pact-js",
     "pact-js-mocha": "pact-foundation/pact-js-mocha"
   },
   "dependencies": {
     "body-parser": "1.15.1",
-    "express": "4.13.4"
+    "express": "4.13.4",
+    "request-promise": "3.0.0"
   }
 }
