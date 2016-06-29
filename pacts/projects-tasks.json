@@ -42,7 +42,12 @@
             "name": "Do nothing",
             "done": false
           }
-        ]
+        ],
+        "matchingRules": {
+          "$.headers.Content-Type": {
+            "match": "type"
+          }
+        }
       }
     }
   ],
