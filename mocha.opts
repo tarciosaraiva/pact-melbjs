@@ -1,0 +1,6 @@
+--bail
+--require ./helper.js
+--reporter spec
+--colors
+--recursive
+--delay

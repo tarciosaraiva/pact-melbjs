@@ -1,23 +1,8 @@
-var path = require('path')
 var Pact = require('pact')
 var expect = require('chai').expect
 var request = require('request-promise')
-var wrapper = require('@pact-foundation/pact-node')
-
-// this is our consumer
-var consumer = require('../src/index')
 
 describe('Pact', function () {
-  // when using the wrapper, tell it where to store the logs and pacts
-  const mockServer = wrapper.createServer({
-    port: 1234,
-    log: path.resolve(process.cwd(), 'logs', 'mockserver-integration.log'),
-    dir: path.resolve(process.cwd(), 'pacts'),
-    spec: 2
-  })
-
-  // the interceptor will forward requests to the mock server
-  var interceptor = new Pact.Interceptor('http://localhost:1234')
 
   // this is the response you expect from your Provider
   const EXPECTED_BODY = [
@@ -29,36 +14,22 @@ describe('Pact', function () {
 
   var provider
 
-  // start your consumer
-  before(function (done) {
-    consumer.listen(9981, done)
-  })
-
-  // ensure that there are no more mock servers
-  // running once all tests have finished
-  after(function () {
-    wrapper.removeAllServers()
-  })
+  // the interceptor will forward requests to the mock server
+  // var interceptor = new Pact.Interceptor('http://localhost:1234')
 
   // start a new mock server
-  beforeEach(function (done) {
-    mockServer.start().then(function () {
-      // and setup Pact, passing the names of the consumer and provider
-      provider = Pact({ consumer: 'Projects', provider: 'Tasks' })
-      // tell interceptor to intercept all requests aimed at the URL
-      interceptor.interceptRequestsOn('http://localhost:9980')
-      done()
-    })
+  beforeEach(function () {
+    // and setup Pact, passing the names of the consumer and provider
+    provider = Pact({ consumer: 'Projects', provider: 'Tasks' })
+    // tell interceptor to intercept all requests aimed at the URL
+    // interceptor.interceptRequestsOn('http://localhost:9980')
   })
 
-  // ensure the mock server is stopped and deleted
-  // once all tests are completed
-  afterEach(function (done) {
-    mockServer.delete().then(function () {
-      interceptor.stopIntercepting()
-      done()
-    })
-  })
+  // ensure the interceptor is stopped at the end of your tests
+  // so it does not interfere with other tests
+  // afterEach(function () {
+  //   interceptor.stopIntercepting()
+  // })
 
   context('with a single request', function () {
     beforeEach(function (done) {

@@ -1,14 +1,6 @@
 var wrapper = require('@pact-foundation/pact-node')
 
-// your provider
-var provider = require('../src/index')
-
 describe('Pact', function () {
-
-  // ensures the provider is up and running
-  before(function (done) {
-    provider.listen(9980, done)
-  })
 
   it('should honour Pact with Consumer 1', function (done) {
     // tell the wrapper

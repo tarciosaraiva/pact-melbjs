@@ -9,13 +9,16 @@ server.use(bodyParser.urlencoded({ extended: true }))
 
 server.get('/projects/:id/tasks', function (req, res) {
   var reqOpts = {
-    uri: 'http://localhost:9980/tasks',
+    uri: 'http://localhost:1234/tasks',
     headers: { 'Accept': 'application/json' },
     json: true
   }
 
+  console.log('triggering request')
+
   request(reqOpts)
     .then(function (tasks) {
+      console.log('received response')
       res.json({
         id: req.params.id,
         name: 'Project ' + req.params.id,
@@ -28,8 +31,8 @@ server.get('/projects/:id/tasks', function (req, res) {
     })
 })
 
-// server.listen(9981, function () {
-//   console.log('listening on 9981')
-// })
+server.listen(9981, function () {
+  console.log('listening on 9981')
+})
 
-module.exports = server
+// module.exports = server
