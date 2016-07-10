@@ -34,5 +34,3 @@ server.get('/projects/:id/tasks', function (req, res) {
 server.listen(9981, function () {
   console.log('listening on 9981')
 })
-
-// module.exports = server

@@ -26,5 +26,3 @@ server.post('/providerStates', function (req, res) {
 server.listen(9980, function () {
   console.log('listening on 9980')
 })
-
-// module.exports = server
