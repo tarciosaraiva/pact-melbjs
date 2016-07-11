@@ -9,16 +9,16 @@ server.use(bodyParser.urlencoded({ extended: true }))
 
 server.get('/projects/:id/tasks', function (req, res) {
   var reqOpts = {
-    uri: 'http://localhost:1234/tasks',
+    uri: `${process.env.EP}/tasks`,
     headers: { 'Accept': 'application/json' },
     json: true
   }
 
-  console.log('triggering request')
+  console.log(`**** Triggering request to ${process.env.EP}`)
 
   request(reqOpts)
     .then(function (tasks) {
-      console.log('received response')
+      console.log('**** Received response')
       res.json({
         id: req.params.id,
         name: 'Project ' + req.params.id,
@@ -32,5 +32,5 @@ server.get('/projects/:id/tasks', function (req, res) {
 })
 
 server.listen(9981, function () {
-  console.log('listening on 9981')
+  console.log(`**** Consumer listening on 9981. Provider: ${process.env.EP}`)
 })

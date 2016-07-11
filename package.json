@@ -4,7 +4,11 @@
   "description": "Sample project for MelbJS",
   "main": "index.js",
   "scripts": {
-    "test:consumer": "mocha ./consumer1/test/index.js --opts mocha.opts",
+    "provider": "node ./provider/src/index.js",
+    "consumer": "EP=http://localhost:9980 node ./consumer/src/index.js",
+    "consumer:pact": "EP=http://localhost:1234 node ./consumer/src/index.js",
+    "pretest:consumer": "rimraf pacts logs",
+    "test:consumer": "mocha ./consumer/test/index.js --opts mocha.opts",
     "test:provider": "mocha ./provider/test/index.js"
   },
   "author": "Tarcio Saraiva <tarcio@gmail.com> (http://twitter.com/tarciosaraiva)",
@@ -17,7 +21,8 @@
     "@pact-foundation/pact-node": "4.5.1",
     "chai": "3.5.0",
     "mocha": "2.5.3",
-    "pact": "1.0.0-rc"
+    "pact": "1.0.0-rc",
+    "rimraf": "2.5.3"
   },
   "dependencies": {
     "body-parser": "1.15.2",

@@ -7,6 +7,7 @@ server.use(bodyParser.json())
 server.use(bodyParser.urlencoded({ extended: true }))
 
 server.get('/tasks', function (req, res) {
+  console.log(`**** Received request for tasks.`)
   res.json([
     {id: 1, name: 'Do the laundry', 'done': true},
     {id: 2, name: 'Do the dishes', 'done': false},
@@ -24,5 +25,5 @@ server.post('/providerStates', function (req, res) {
 })
 
 server.listen(9980, function () {
-  console.log('listening on 9980')
+  console.log('**** Provider listening on 9980.')
 })
